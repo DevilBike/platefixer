@@ -9,6 +9,7 @@
     <Description>Checks your adventurer plate for things that make the game reset it to the default portrait, such as a portrait taken in old gear or glamour, and offers to fix them after showing you a preview.
 Personal use, not published.</Description>
     <Tags>adventurer plate;portrait;banner</Tags>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

@@ -101,8 +101,46 @@ public class PlateCheckerTests
         var report = Checker.Check(snapshot);
 
         var issue = Assert.Single(report.Issues);
-        Assert.Equal(IssueSeverity.Warning, issue.Severity);
+        Assert.Equal(IssueSeverity.Error, issue.Severity);
         Assert.Equal(3, issue.SuggestedFix?.GearsetIndex);
+        Assert.Contains("different gear", issue.Message);
+        Assert.False(report.IsValid);
+    }
+
+    [Fact]
+    public void PortraitFromAnotherBodyTypeIsAnError()
+    {
+        var snapshot = new PlateSnapshot
+        {
+            GearsetPortraits =
+            [
+                new PortraitInfo { GearsetIndex = 1, SavedGearChecksum = 7, CurrentGearChecksum = 7, AppearanceMatches = false },
+            ],
+        };
+
+        var issue = Assert.Single(Checker.Check(snapshot).Issues);
+
+        Assert.Equal(IssueSeverity.Error, issue.Severity);
+        Assert.Contains("different body type", issue.Message);
+        Assert.Equal(FixKind.RecaptureGearsetPortrait, issue.SuggestedFix?.Kind);
+    }
+
+    [Fact]
+    public void UncheckablePortraitIsReportedButNotAnError()
+    {
+        var snapshot = new PlateSnapshot
+        {
+            GearsetPortraits =
+            [
+                new PortraitInfo { GearsetIndex = 4, SavedGearChecksum = 7, CannotCheckReason = "open the glamour dresser once." },
+            ],
+        };
+
+        var report = Checker.Check(snapshot);
+
+        var issue = Assert.Single(report.Issues);
+        Assert.Equal(IssueSeverity.Info, issue.Severity);
+        Assert.Null(issue.SuggestedFix);
         Assert.True(report.IsValid);
     }
 

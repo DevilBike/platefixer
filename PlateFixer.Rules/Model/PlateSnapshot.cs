@@ -48,7 +48,21 @@ public sealed record PortraitInfo
     /// <summary>Checksum of the matching gear right now, or null if it could not be computed.</summary>
     public uint? CurrentGearChecksum { get; init; }
 
-    public bool IsOutdated => CurrentGearChecksum is { } current && current != SavedGearChecksum;
+    /// <summary>
+    /// False when the portrait was saved on a different race, clan, gender or height than the character has now
+    /// (for example copied from another character, or after a Fantasia). Null if unknown.
+    /// </summary>
+    public bool? AppearanceMatches { get; init; }
+
+    /// <summary>True for the gear set the character is wearing right now.</summary>
+    public bool IsCurrentGearset { get; init; }
+
+    /// <summary>Set when the current gear couldn't be worked out, so the portrait wasn't checked.</summary>
+    public string? CannotCheckReason { get; init; }
+
+    public bool GearMismatch => CurrentGearChecksum is { } current && current != SavedGearChecksum;
+
+    public bool IsOutdated => GearMismatch || AppearanceMatches == false;
 }
 
 public enum DesignItemKind

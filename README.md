@@ -19,9 +19,24 @@ with each portrait, and when it stops matching, the portrait goes back to the de
 
 - [x] Plugin skeleton: window, command, settings, check-on-login, snapshot export
 - [x] Rules: outdated plate portrait, default portrait showing, locked design items, outdated gear set portraits, plate hidden
-- [ ] Reading the plate from game memory (`PlateFixer/Game/GamePlateSource.cs` is a placeholder, so the window says "isn't built yet")
-- [ ] Applying fixes (the "Apply fix" button in the preview is disabled until then)
+- [x] Gear set portraits: reads every gear set's portrait, flags ones saved in other gear/glamour or on a different body type, and fixes them all on a button press
+- [ ] Reading the adventurer plate itself (its portrait and design items)
 - [ ] Optional automatic mode
+
+### How the portrait fix works
+
+Duties show the portrait linked to the gear set you're wearing. The game keeps a checksum of the gear each portrait
+was saved in, plus your race, clan, gender and height, and shows the default portrait when they don't match.
+
+**Check plate** compares every gear set's portrait with that gear set. For the gear set you're wearing it uses the
+game's own checksum of your equipped gear. For the others it calculates the checksum from the gear set (and its
+glamour plate) with the game's checksum function, but only after that calculation has matched the game on the gear
+set you're wearing, on the current game version. Until then the window says which gear sets it couldn't check and why.
+Gear sets linked to a glamour plate need the glamour dresser opened once per session so the plate can be read.
+
+**Apply fix** updates the stored checksum and body type of each flagged portrait, the same thing the game does when
+you save in the portrait editor. Pose, camera, lighting, background and frame stay as they were. The fix is refused
+during a duty, while loading, and while the portrait editor is open.
 
 ## Building
 
@@ -65,7 +80,7 @@ for it in the dev plugin list. Otherwise disable and enable it again. Logs are i
 ## Using it
 
 - **Check plate** reads your plate and lists anything the game would reset or reject. Nothing is changed.
-- **Preview fix** shows exactly what the fix would do, in order. Applying it comes in a later step.
+- **Preview fix** shows exactly what the fix would do, in order, and **Apply fix** does it.
 - **Export snapshot** saves what was checked as JSON in the plugin's config folder, for the optional viewer.
 - **Settings** lets you turn individual checks off, and turn off the check when you log in.
 

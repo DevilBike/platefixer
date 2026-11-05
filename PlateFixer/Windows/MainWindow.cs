@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Colors;
@@ -13,6 +14,7 @@ public class MainWindow : Window
     private readonly Plugin plugin;
     private bool showFixPreview;
     private string? exportMessage;
+    private string? fixMessage;
 
     public MainWindow(Plugin plugin) : base("Plate Fixer###PlateFixerMain")
     {
@@ -37,6 +39,7 @@ public class MainWindow : Window
             plugin.RunCheck();
             showFixPreview = false;
             exportMessage = null;
+            fixMessage = null;
         }
 
         var report = plugin.LastReport;
@@ -64,6 +67,10 @@ public class MainWindow : Window
 
         if (exportMessage is not null)
             ImGui.TextWrapped(exportMessage);
+        if (fixMessage is not null)
+            ImGui.TextColored(ImGuiColors.HealerGreen, fixMessage);
+        if (plugin.CalibrationNote is { } note)
+            ImGui.TextColored(ImGuiColors.DalamudYellow, note);
 
         ImGui.Separator();
 
@@ -103,15 +110,29 @@ public class MainWindow : Window
         ImGui.TextUnformatted("The fix would do this:");
         var plan = report.FixPlan;
         for (var i = 0; i < plan.Count; i++)
-            ImGui.BulletText($"{i + 1}. {plan[i].Description}");
+        {
+            var supported = Plugin.CanApply(plan[i].Kind);
+            ImGui.BulletText($"{i + 1}. {plan[i].Description}{(supported ? "" : " (not supported yet, skipped)")}");
+        }
 
         ImGui.Spacing();
-        // Step 4 wires this up. Until then the button stays disabled so nothing is changed in game.
-        using (ImRaii.Disabled(true))
-            ImGui.Button("Apply fix");
-        ImGui.SameLine();
-        ImGui.TextDisabled("(applying fixes comes in a later step)");
+        var whyNot = Game.PortraitFixer.WhyNotNow();
+        using (ImRaii.Disabled(whyNot is not null || !plan.Any(f => Plugin.CanApply(f.Kind))))
+        {
+            if (ImGui.Button("Apply fix"))
+            {
+                fixMessage = plugin.ApplyFixes();
+                showFixPreview = false;
+            }
+        }
 
+        if (whyNot is not null)
+        {
+            ImGui.SameLine();
+            ImGui.TextDisabled(whyNot);
+        }
+
+        ImGui.SameLine();
         if (ImGui.Button("Cancel"))
             showFixPreview = false;
     }
