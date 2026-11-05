@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
+  <PropertyGroup>
+    <Version>0.0.1.0</Version>
+    <!-- Manifest fields (see https://github.com/goatcorp/DalamudPackager/blob/827d88dc/DalamudPackager/DalamudPackager.cs#L420) -->
+    <Author>Bike</Author>
+    <Name>Plate Fixer</Name>
+    <Punchline>Spots adventurer plates the game is about to reset, and fixes them.</Punchline>
+    <Description>Checks your adventurer plate for things that make the game reset it to the default portrait, such as a portrait taken in old gear or glamour, and offers to fix them after showing you a preview.
+Personal use, not published.</Description>
+    <Tags>adventurer plate;portrait;banner</Tags>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PlateFixer.Rules\PlateFixer.Rules.csproj" />
+  </ItemGroup>
+</Project>
