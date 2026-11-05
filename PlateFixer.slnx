@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="PlateFixer/PlateFixer.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="PlateFixer.Rules/PlateFixer.Rules.csproj" />
+  <Project Path="PlateFixer.Rules.Tests/PlateFixer.Rules.Tests.csproj" />
+</Solution>
