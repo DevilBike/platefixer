@@ -4,4 +4,7 @@
   </Project>
   <Project Path="PlateFixer.Rules/PlateFixer.Rules.csproj" />
   <Project Path="PlateFixer.Rules.Tests/PlateFixer.Rules.Tests.csproj" />
+  <Project Path="PlateFixer.SaveData/PlateFixer.SaveData.csproj" />
+  <Project Path="PlateFixer.SaveData.Tests/PlateFixer.SaveData.Tests.csproj" />
+  <Project Path="PlateFixer.Editor/PlateFixer.Editor.csproj" />
 </Solution>
