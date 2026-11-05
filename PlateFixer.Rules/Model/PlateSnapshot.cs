@@ -28,6 +28,12 @@ public sealed record PlateSnapshot
     /// <summary>Backgrounds, frames, accents and other design items used on the plate.</summary>
     public IReadOnlyList<DesignItem> DesignItems { get; init; } = [];
 
+    /// <summary>
+    /// Design items the character has unlocked, so an outside editor can offer them by name.
+    /// Optional: the plugin may leave it empty.
+    /// </summary>
+    public IReadOnlyList<DesignItem> AvailableDesignItems { get; init; } = [];
+
     /// <summary>Portraits saved against gear sets (the Portraits list in the game).</summary>
     public IReadOnlyList<PortraitInfo> GearsetPortraits { get; init; } = [];
 }

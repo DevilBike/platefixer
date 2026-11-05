@@ -19,4 +19,10 @@ public static class SnapshotJson
     public static PlateSnapshot Deserialize(string json) =>
         JsonSerializer.Deserialize<PlateSnapshot>(json, Options)
         ?? throw new JsonException("Snapshot JSON was empty.");
+
+    public static string SerializeEdits(PlateEdits edits) => JsonSerializer.Serialize(edits, Options);
+
+    public static PlateEdits DeserializeEdits(string json) =>
+        JsonSerializer.Deserialize<PlateEdits>(json, Options)
+        ?? throw new JsonException("Edits JSON was empty.");
 }
